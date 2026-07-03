@@ -384,7 +384,7 @@ class InterfaceScan(tk.Tk):
         self._inserer_ligne_arbre(ligne, resultat["autorise"])
         self.label_compteur.config(text=f"{self.nombre_badges} badge(s) scanné(s)")
 
-        if self.imprimante.est_connectee():
+        if resultat["autorise"] and self.imprimante.est_connectee():
             imprime = self.imprimante.imprimer_ticket(
                 numero_badge,
                 numero_ticket,
