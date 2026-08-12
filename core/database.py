@@ -46,6 +46,7 @@ class BaseDeDonnees:
                 port=self.db_config["port"],
                 user=self.db_config["user"],
                 password=self.db_config["password"],
+                use_pure=True,
             )
             curseur = connexion_serveur.cursor()
             curseur.execute(
@@ -55,7 +56,7 @@ class BaseDeDonnees:
             curseur.close()
             connexion_serveur.close()
 
-            self.connexion = mysql.connector.connect(**self.db_config)
+            self.connexion = mysql.connector.connect(**self.db_config, use_pure=True)
             self._creer_tables()
 
             self.derniere_erreur = None

@@ -15,11 +15,20 @@ from license_manager import check_license
 
 def main():
 
-    sys.stdout.reconfigure(encoding="utf-8")
+    if sys.stdout is not None:
+        sys.stdout.reconfigure(encoding="utf-8")
 
     # Vérification de la licence hardware
     if not check_license():
-        print("Licence invalide : cette application n'est pas autorisée sur ce PC.")
+        import tkinter as tk
+        from tkinter import messagebox
+        racine = tk.Tk()
+        racine.withdraw()
+        messagebox.showerror(
+            "Licence invalide",
+            "Cette application n'est pas autorisée sur ce PC.\n"
+            "Vérifiez que license.key est présent et correspond à ce PC.",
+        )
         return
 
     # Lancement de l'application

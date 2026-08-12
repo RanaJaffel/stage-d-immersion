@@ -1,6 +1,15 @@
 import subprocess
 import hashlib
 import os
+import sys
+
+
+def _chemin_license() -> str:
+    if getattr(sys, "frozen", False):
+        dossier = os.path.dirname(sys.executable)
+    else:
+        dossier = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(dossier, "license.key")
 
 
 def get_hardware_id():
@@ -49,12 +58,13 @@ def check_license():
         return False
 
 
-    if not os.path.exists("license.key"):
-        print("license.key introuvable")
+    chemin = _chemin_license()
+
+    if not os.path.exists(chemin):
+        print("license.key introuvable :", chemin)
         return False
 
-
-    with open("license.key", "r") as file:
+    with open(chemin, "r") as file:
         licensed_hwid = file.read().replace("HWID=", "").strip()
 
 

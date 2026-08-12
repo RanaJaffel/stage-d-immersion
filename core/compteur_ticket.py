@@ -12,12 +12,24 @@ de l'application.
 """
 
 import os
+import sys
 import threading
 
-CHEMIN_COMPTEUR = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    "ticket_compteur.txt",
-)
+
+def _dossier_application() -> str:
+    """
+    - En exécution normale (python main.py) : dossier racine du projet.
+    - Une fois transformé en .exe : __file__ pointe vers un dossier
+      temporaire recréé à chaque lancement, donc on utilise plutôt
+      le dossier de l'exécutable (sys.executable) pour que le
+      compteur soit bien conservé d'un lancement à l'autre.
+    """
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+CHEMIN_COMPTEUR = os.path.join(_dossier_application(), "ticket_compteur.txt")
 
 _verrou = threading.Lock()
 
